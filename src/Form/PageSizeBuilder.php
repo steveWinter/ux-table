@@ -18,7 +18,7 @@ final class PageSizeBuilder
     public const DEFAULT_FIELD_NAME = 'pageSize';
 
     public function __construct(
-        private readonly FormBuilderInterface $builder,
+        private readonly array $options = [],
         private readonly string $fieldName = self::DEFAULT_FIELD_NAME,
     ) {}
 
@@ -71,7 +71,7 @@ final class PageSizeBuilder
     private function getChoices(): array
     {
         $choices = array_values($this->validatePageSizes(
-            $this->builder->getOptions()['pageSizes'] ?? null,
+            $this->options['pageSizes'] ?? null,
         ) ?? self::DEFAULT_PAGE_SIZES);
 
         return array_combine($choices, $choices);
@@ -80,7 +80,7 @@ final class PageSizeBuilder
     private function getDefaultPageSize(): int
     {
         $choices = $this->getChoices();
-        $defaults = [$this->builder->getOptions()['pageSize'] ?? null, self::DEFAULT_PAGE_SIZE, array_key_first($choices)];
+        $defaults = [$this->options['pageSize'] ?? null, self::DEFAULT_PAGE_SIZE, array_key_first($choices)];
         foreach ($defaults as $default) {
             if (array_key_exists($default, $choices)) {
                 return $default;
